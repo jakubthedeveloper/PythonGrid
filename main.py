@@ -1,5 +1,4 @@
 import pygame
-import time
 import random
 from datetime import datetime
 
@@ -58,7 +57,6 @@ while running:
     prev = time
   
   pygame.display.flip()
-  #time.sleep(1)
   
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
