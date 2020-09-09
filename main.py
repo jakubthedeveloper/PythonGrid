@@ -25,37 +25,80 @@ def fillCell(x, y):
 
 board = [
   [0,0,0,0,0,0,0,0,0,0],
-  [0,1,0,0,0,0,0,0,0,0],
+  [0,1,1,0,0,0,0,0,0,0],
+  [0,0,1,1,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,1,0,0,0,0],
+  [0,0,0,0,1,1,0,0,0,0],
   [0,0,0,0,1,1,1,0,0,0],
   [0,0,0,0,0,1,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,1,0,0],
   [0,0,0,0,0,0,0,0,0,1],
   [0,0,0,0,0,0,0,0,1,1]
 ]
-running = True
 
-prev = datetime.now()
-while running:
-  time = datetime.now()
-  screen.fill(black)
+def neighbourCount(x,y):
+  count = 0;
   
-  drawGrid()
-  
+  if x > 0:
+    count = count + board[y][x-1]
+    
+  if x > 0 and y > 0:
+    count = count +board[y-1][x-1]
+
+  if x > 0 and y < gridSize - 1:
+    count = count +board[y+1][x-1]
+    
+  if y > 0:
+    count = count +board[y-1][x]
+
+  if y < gridSize - 1:
+    count = count +board[y+1][x]  
+    
+  if x < gridSize - 1:
+    count = count +board[y][x+1]
+    
+  if x < gridSize - 1 and y > 0:
+    count = count +board[y-1][x+1]
+
+  if x < gridSize - 1 and y < gridSize - 1:
+    count = count +board[y+1][x+1]
+    
+  return count
+
+def processBoard():
+  global board
+  boardCopy = board
+  for y in range(len(board)):
+    for x in range(len(board[y])):
+      nc = neighbourCount(x, y)
+      if board[y][x] == 1 and (nc == 2 or nc ==3):
+        boardCopy[y][x] = 1
+      elif board[y][x] == 0 and nc == 3:
+        boardCopy[y][x] = 1
+      else:
+        boardCopy[y][x] = 0
+      
+  board = boardCopy
+
+def drawCells():
   for y in range(len(board)):
     for x in range(len(board[y])):
       if board[y][x] == 1:
         fillCell(x, y)
-        
-  if (time - prev).total_seconds() > updateTime and random.randint(1,10) == 5: # just to add some changes
-    x = random.randint(0,gridSize-1);
-    y = random.randint(0,gridSize-1);
 
-    board[y][x] = 0 if board[y][x] else 1
-    prev = time
+running = True
+prevTime = datetime.now()
+
+while running:
+  time = datetime.now()
+  screen.fill(black)
   
+  if (time - prevTime).total_seconds() > updateTime:
+    processBoard()
+    prevTime = time
+
+  drawGrid()
+  drawCells()
   pygame.display.flip()
   
   for event in pygame.event.get():
