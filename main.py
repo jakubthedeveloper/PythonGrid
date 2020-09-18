@@ -7,8 +7,9 @@ black = (0, 0, 0)
 (width, height) = (300, 300) # Dimension of the window
 screen = pygame.display.set_mode((width, height)) # Making of the screen
 
-gridSize = 40
-updateTime = 0.5
+gridSize = 80
+drawGridLines = False
+updateTime = 0.1
 
 board = [];
 
@@ -90,21 +91,35 @@ def drawCells():
         fillCell(x, y)
 
 
+#pattern = [
+#  [1,0,0,0,0,0,0,0,0,0],
+#  [0,1,1,0,0,0,0,0,0,0],
+#  [0,0,1,1,0,0,0,0,0,0],
+#  [0,0,0,0,0,0,0,0,0,0],
+#  [0,0,0,0,1,1,0,0,0,0],
+#  [0,0,0,0,1,1,1,0,0,0],
+#  [0,0,0,0,0,1,0,0,0,0],
+#  [0,0,0,0,0,0,0,1,0,0],
+#  [0,0,0,0,0,0,0,0,0,1],
+#  [0,0,0,0,0,0,0,0,1,1]
+#]
+
+
 pattern = [
   [1,0,0,0,0,0,0,0,0,0],
-  [0,1,1,0,0,0,0,0,0,0],
-  [0,0,1,1,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,1,1,0,0,0,0],
+  [0,1,0,0,0,0,0,0,0,0],
+  [0,0,1,0,0,0,0,0,0,0],
+  [0,0,0,1,0,0,0,0,0,0],
   [0,0,0,0,1,1,1,0,0,0],
   [0,0,0,0,0,1,0,0,0,0],
+  [0,0,0,0,0,0,1,0,0,0],
   [0,0,0,0,0,0,0,1,0,0],
+  [0,0,0,0,0,0,0,0,1,0],
   [0,0,0,0,0,0,0,0,0,1],
-  [0,0,0,0,0,0,0,0,1,1]
 ]
 
 initBoard()
-placePattern(pattern, 6, 6)
+placePattern(pattern, 10, 10)
 
 running = True
 prevTime = datetime.now()
@@ -115,9 +130,12 @@ while running:
   
   if (time - prevTime).total_seconds() > updateTime:
     processBoard()
+
     prevTime = time
 
-  #drawGrid() # grid is good on lower grid sizes
+  if drawGridLines:
+    drawGrid()
+
   drawCells()
   pygame.display.flip()
   
