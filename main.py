@@ -7,8 +7,17 @@ black = (0, 0, 0)
 (width, height) = (300, 300) # Dimension of the window
 screen = pygame.display.set_mode((width, height)) # Making of the screen
 
-gridSize = 10
+gridSize = 40
 updateTime = 0.5
+
+board = [];
+
+def initBoard():
+  for y in range(gridSize):
+    row = []
+    for x in range(gridSize):
+      row.append(0)
+    board.append(row)
 
 def drawGrid():
   for y in range(1, gridSize):
@@ -23,18 +32,12 @@ def fillCell(x, y):
 
   pygame.draw.rect(screen, white, (x * (width / gridSize), y * (height / gridSize), (width / gridSize), (height / gridSize)))
 
-board = [
-  [0,0,0,0,0,0,0,0,0,0],
-  [0,1,1,0,0,0,0,0,0,0],
-  [0,0,1,1,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,1,1,0,0,0,0],
-  [0,0,0,0,1,1,1,0,0,0],
-  [0,0,0,0,0,1,0,0,0,0],
-  [0,0,0,0,0,0,0,1,0,0],
-  [0,0,0,0,0,0,0,0,0,1],
-  [0,0,0,0,0,0,0,0,1,1]
-]
+def placePattern(pattern, offset_x, offset_y):
+  global board
+  for y in range(len(pattern)):
+    for x in range(len(pattern[y])):
+      if offset_y + y < len(board) and offset_x + x < len(board[offset_y + y]):
+        board[offset_y + y][offset_x + x] = pattern[y][x]
 
 def neighbourCount(x,y):
   count = 0;
@@ -43,25 +46,25 @@ def neighbourCount(x,y):
     count = count + board[y][x-1]
     
   if x > 0 and y > 0:
-    count = count +board[y-1][x-1]
+    count = count + board[y-1][x-1]
 
   if x > 0 and y < gridSize - 1:
-    count = count +board[y+1][x-1]
+    count = count + board[y+1][x-1]
     
   if y > 0:
-    count = count +board[y-1][x]
+    count = count + board[y-1][x]
 
   if y < gridSize - 1:
-    count = count +board[y+1][x]  
+    count = count + board[y+1][x]  
     
   if x < gridSize - 1:
-    count = count +board[y][x+1]
+    count = count + board[y][x+1]
     
   if x < gridSize - 1 and y > 0:
-    count = count +board[y-1][x+1]
+    count = count + board[y-1][x+1]
 
   if x < gridSize - 1 and y < gridSize - 1:
-    count = count +board[y+1][x+1]
+    count = count + board[y+1][x+1]
     
   return count
 
@@ -86,6 +89,23 @@ def drawCells():
       if board[y][x] == 1:
         fillCell(x, y)
 
+
+pattern = [
+  [1,0,0,0,0,0,0,0,0,0],
+  [0,1,1,0,0,0,0,0,0,0],
+  [0,0,1,1,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,1,1,0,0,0,0],
+  [0,0,0,0,1,1,1,0,0,0],
+  [0,0,0,0,0,1,0,0,0,0],
+  [0,0,0,0,0,0,0,1,0,0],
+  [0,0,0,0,0,0,0,0,0,1],
+  [0,0,0,0,0,0,0,0,1,1]
+]
+
+initBoard()
+placePattern(pattern, 6, 6)
+
 running = True
 prevTime = datetime.now()
 
@@ -97,7 +117,7 @@ while running:
     processBoard()
     prevTime = time
 
-  drawGrid()
+  #drawGrid() # grid is good on lower grid sizes
   drawCells()
   pygame.display.flip()
   
