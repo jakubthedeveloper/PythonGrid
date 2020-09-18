@@ -4,12 +4,12 @@ from datetime import datetime
 
 white = (255, 255, 255)
 black = (0, 0, 0)
-(width, height) = (300, 300) # Dimension of the window
+(width, height) = (800, 800) # Dimension of the window
 screen = pygame.display.set_mode((width, height)) # Making of the screen
 
-gridSize = 80
+gridSize = 100
 drawGridLines = False
-updateTime = 0.1
+updateTime = 0.02
 
 board = [];
 
@@ -22,16 +22,16 @@ def initBoard():
 
 def drawGrid():
   for y in range(1, gridSize):
-    pygame.draw.line(screen, white, (0, (height / gridSize) * y), (width, (height / gridSize) * y), 1)
+    pygame.draw.line(screen, white, (0, int((height / gridSize) * y)), (width, int((height / gridSize) * y)), 1)
     
   for x in range(1, gridSize):
-    pygame.draw.line(screen, white, ((width / gridSize) * x, 0), ((width / gridSize) * x, height), 1)
+    pygame.draw.line(screen, white, (int((width / gridSize) * x), 0), (int((width / gridSize) * x), height), 1)
       
 def fillCell(x, y):
   if x < 0 or x > gridSize or y < 0 or y > gridSize:
     raise Exception("Invalid coords: " + str(x) + ":" + str(y)); 
 
-  pygame.draw.rect(screen, white, (x * (width / gridSize), y * (height / gridSize), (width / gridSize), (height / gridSize)))
+  pygame.draw.rect(screen, white, (x * int(width / gridSize), int(y * (height / gridSize)), int(width / gridSize), int(height / gridSize)))
 
 def placePattern(pattern, offset_x, offset_y):
   global board
@@ -91,35 +91,22 @@ def drawCells():
         fillCell(x, y)
 
 
-#pattern = [
-#  [1,0,0,0,0,0,0,0,0,0],
-#  [0,1,1,0,0,0,0,0,0,0],
-#  [0,0,1,1,0,0,0,0,0,0],
-#  [0,0,0,0,0,0,0,0,0,0],
-#  [0,0,0,0,1,1,0,0,0,0],
-#  [0,0,0,0,1,1,1,0,0,0],
-#  [0,0,0,0,0,1,0,0,0,0],
-#  [0,0,0,0,0,0,0,1,0,0],
-#  [0,0,0,0,0,0,0,0,0,1],
-#  [0,0,0,0,0,0,0,0,1,1]
-#]
-
-
 pattern = [
   [1,0,0,0,0,0,0,0,0,0],
-  [0,1,0,0,0,0,0,0,0,0],
-  [0,0,1,0,0,0,0,0,0,0],
-  [0,0,0,1,0,0,0,0,0,0],
+  [1,1,1,0,0,0,0,0,0,0],
+  [1,0,1,1,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,1,1,0,0,0,0],
   [0,0,0,0,1,1,1,0,0,0],
   [0,0,0,0,0,1,0,0,0,0],
-  [0,0,0,0,0,0,1,0,0,0],
-  [0,0,0,0,0,0,0,1,0,0],
-  [0,0,0,0,0,0,0,0,1,0],
-  [0,0,0,0,0,0,0,0,0,1],
+  [0,0,0,0,0,0,1,1,0,0],
+  [0,0,0,0,0,0,1,0,0,1],
+  [0,0,0,0,0,0,0,0,1,1]
 ]
 
+
 initBoard()
-placePattern(pattern, 10, 10)
+placePattern(pattern, 0, 0)
 
 running = True
 prevTime = datetime.now()
