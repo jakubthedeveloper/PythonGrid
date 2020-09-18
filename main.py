@@ -111,7 +111,7 @@ placePattern(pattern, 0, 0)
 
 running = True
 prevTime = datetime.now()
-
+input("ttt")
 while running:
   time = datetime.now()
   screen.fill(black)
