@@ -1,5 +1,4 @@
 import pygame
-import random
 from datetime import datetime
 
 white = (255, 255, 255)
